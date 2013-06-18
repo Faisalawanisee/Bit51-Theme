@@ -37,28 +37,23 @@ function genesis_page_archive_content() { ?>
 			<?php wp_list_pages( array( 'title_li' => '', 'exclude' => 4698 ) ); ?>
 		</ul>
 
-		<h4><?php _e( 'Categories:', 'genesis' ); ?></h4>
+		<h4><?php _e( '50 Latest Posts:', 'genesis' ); ?></h4>
 		<ul>
-			<?php wp_list_categories( 'sort_column=name&title_li=' ); ?>
-		</ul>
-
-		<h4><?php _e( '100 Latest Posts:', 'genesis' ); ?></h4>
-		<ul>
-			<?php wp_get_archives( 'type=postbypost&limit=100' ); ?>
+			<?php wp_get_archives( 'type=postbypost&limit=50' ); ?>
 		</ul>
 
 	</div><!-- end .archive-page-->
 
 	<div class="archive-page">
 
+		<h4><?php _e( 'Categories:', 'genesis' ); ?></h4>
+		<ul>
+			<?php wp_list_categories( 'sort_column=name&title_li=' ); ?>
+		</ul>
+
 		<h4><?php _e( 'Authors:', 'genesis' ); ?></h4>
 		<ul>
 			<?php wp_list_authors( 'exclude_admin=0&optioncount=1' ); ?>
-		</ul>
-
-		<h4><?php _e( 'Monthly:', 'genesis' ); ?></h4>
-		<ul>
-			<?php wp_get_archives( 'type=monthly' ); ?>
 		</ul>
 
 	</div>
