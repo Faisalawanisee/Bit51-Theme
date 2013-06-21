@@ -195,7 +195,7 @@ function bit51_author_box() {
 				$comma = $profiles['facebook']['length'] > 1 ? ',' : '';
 				$and = $profiles['facebook']['length'] > 1 && ( $profiles['linkedin']['length'] <= 1 || $profiles['twitter']['length'] <= 1 ) ? ' and' : '';
 				
-				$authinfo .= $comma . $and . ' <a href="http://plus.google.com/' . $profiles['google']['url'] . '?rel=author" rel="me" target="_blank" title="' . get_the_author_meta( 'display_name' ) . ' on Google+">Google+</a>';
+				$authinfo .= $comma . $and . ' <a href="http://plus.google.com/' . $profiles['google']['url'] . '?rel=author" rel="author" target="_blank" title="' . get_the_author_meta( 'display_name' ) . ' on Google+">Google+</a>';
 
 			}
 
