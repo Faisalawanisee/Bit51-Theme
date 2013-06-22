@@ -6,6 +6,9 @@ require_once( get_template_directory() . '/lib/init.php' );
 define( 'CHILD_THEME_NAME', 'Bit51 Theme' );
 define( 'CHILD_THEME_URL', 'http://bit51.com/' );
 
+// Don't load style.css for the user
+remove_action( 'genesis_meta', 'genesis_load_stylesheet' );
+
 // Add Viewport meta tag for mobile browsers
 add_action( 'genesis_meta', 'bit51_viewport_meta_tag' );
 
