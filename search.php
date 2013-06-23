@@ -17,4 +17,12 @@
  * @link     http://www.studiopress.com/themes/genesis
  */
 
+// Show only the post exceprt on search (for Relevanssi)
+remove_action( 'genesis_post_content', 'genesis_do_post_content' );
+add_action( 'genesis_post_content', 'bit51_do_post_excerpt' );
+
+function bit51_do_post_excerpt() {
+	the_excerpt();
+}
+
 genesis();
