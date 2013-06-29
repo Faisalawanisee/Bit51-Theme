@@ -24,10 +24,6 @@ function bit51_scripts() {
 		'bit51-js',
 		get_stylesheet_directory_uri() . '/js/scripts.min.js'
 	);
-	wp_enqueue_script(
-		'bit51-mint',
-		'http://mint.bit51.com/?js'
-	);
 }
 
 //Add FontAwesome
