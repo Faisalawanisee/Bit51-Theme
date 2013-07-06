@@ -81,42 +81,10 @@ genesis_register_sidebar( array(
 // Remove after post meta
 remove_action( 'genesis_after_post_content', 'genesis_post_meta' );
 
-// Edit comment form
-add_filter( 'genesis_comment_form_args', 'bit51_comment_form_args' );
-
 // Remove secondary sidebar
 unregister_sidebar( 'header-right' );
 unregister_sidebar( 'sidebar-alt' );
 
-
-function bit51_comment_form_args( $args ) {
-
-	$args['title_reply'] = 'Join The Conversation';
-
-	return $args;
-
-}
-
-// Register and add after post widget area
-genesis_register_sidebar( 
-	array(
-		'id'			=> 'after-post',
-		'name'			=> __( 'After Post', 'bit51' ),
-		'description'	=> __( 'This is the section after a post.', 'bit51' ),
-	) 
-);
-
-add_action( 'genesis_before_comments', 'bit51_after_content' );
-
-function bit51_after_content() {
-
-	if ( is_single() ) {
-
-		require( CHILD_DIR . '/after-post.php' );
-
-	}
-
-}
 
 // Modify the Author Box
 add_filter( 'get_the_author_genesis_author_box_single', '__return_true' );
@@ -227,20 +195,6 @@ function bit51_author_box() {
 
 }
 
-//Add comment policies
-add_action( 'genesis_after_comment_form', 'bit51_after_comment_box' );
-
-function bit51_after_comment_box() {
-
-	if ( is_single() ) {
-
-		echo '<p class="comment-policy">Please review our <a href="http://bit51.com/policies-and-disclosures/#comments">Comment Policy</a> and our <a href="http://bit51.com/policies-and-disclosures/#privacy">Privacy Policy</a> before posting.</p>';
-		echo '</div>';
-
-	}
-
-}
-
 //Customize the footer credits
 add_filter( 'genesis_footer_creds_text', 'custom_footer_creds_text' );
 
@@ -307,71 +261,6 @@ function bit51_right_nav( $menu, $args ) {
 		. '<li class="social-share"><a href="http://feeds.bit51.com/site/" target="_blank" title="Subscribe via RSS"><i class="icon-rss icon-2x"></i></a></li>' . PHP_EOL;
 
 	return $menu . $follow;
-
-}
-
-// Modify the Comments
-remove_action( 'genesis_list_comments', 'genesis_default_list_comments' );
-add_action( 'genesis_list_comments', 'bit51_default_list_comments' );
-add_filter( 'genesis_title_comments', 'bit51_title_comments' );
-
-function bit51_title_comments() {
-	$title = '<h3>Discussion</h3>';
-	return $title;
-}
-
-function bit51_default_list_comments() {
-
-	$args = array(
-		'type'			=> 'comment',
-		'avatar_size'	=> 48,
-		'callback'		=> 'bit51_comment_callback',
-	);
-
-	$args = apply_filters( 'genesis_comment_list_args', $args );
-
-	wp_list_comments( $args );
-
-}
-
-function bit51_comment_callback( $comment, $args, $depth ) {
-
-	$GLOBALS['comment'] = $comment; ?>
-
-	<li <?php comment_class(); ?> id="comment-<?php comment_ID(); ?>">
-
-		<?php do_action( 'genesis_before_comment' ); ?>
-
-		<div class="comment-avatar"><?php echo get_avatar( $comment, $size = $args['avatar_size'] ); ?></div>
-
-		<div class="comment-body">
-			<div class="comment-header">
-				<span class="comment-author vcard">
-					<?php printf( __( '<cite class="fn">%s</cite> ', 'genesis' ), get_comment_author_link() ); ?>
-				</span><!-- end .comment-author -->
-
-				<span class="comment-meta commentmetadata">
-					<a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ); ?>"><?php echo human_time_diff( get_comment_time('U'), current_time('timestamp')) . " " . __('ago'); ?></a>
-					<?php edit_comment_link( __( '(Edit)', 'genesis' ), '' ); ?>
-				</spam><!-- end .comment-meta -->
-			</div>
-
-
-			<div class="comment-content">
-				<?php if ( $comment->comment_approved == '0' ) : ?>
-					<p class="alert"><?php echo apply_filters( 'genesis_comment_awaiting_moderation', __( 'Your comment is awaiting moderation.', 'genesis' ) ); ?></p>
-				<?php endif; ?>
-
-				<?php comment_text(); ?>
-			</div><!-- end .comment-content -->
-
-			<div class="reply">
-				<?php comment_reply_link( array_merge( $args, array( 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
-			</div>
-
-		</div>
-
-		<?php do_action( 'genesis_after_comment' );
 
 }
 
