@@ -32,8 +32,6 @@ function bit51_add_my_stylesheet() {
 
 	wp_register_style( 'bit51', get_stylesheet_directory_uri() . '/css/main.min.css' );
 	wp_enqueue_style( 'bit51' );
-	wp_register_style( 'fonts-awesome', get_stylesheet_directory_uri() . '/css/font-awesome.min.css' );
-	wp_enqueue_style( 'fonts-awesome' );
 	wp_register_style( 'gfonts', 'http://fonts.googleapis.com/css?family=Gudea:400,700|Arvo:700' );
 	wp_enqueue_style( 'gfonts' );
 
