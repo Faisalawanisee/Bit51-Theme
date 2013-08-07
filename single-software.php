@@ -238,32 +238,34 @@ if ( ! class_exists( 'bit51_software_page' ) ) {
 				
 				// display plugin meta information
 				echo '<div id="software-meta">';
-					echo '<div class="software-meta-table">';
-						echo '<div class="leftcol">Version:</div>';
-						echo '<div class="software-version rightcol">';
-							echo $meta['Version'];
-						echo '</div>';
-						echo '<div class="leftcol">Downloads:</div>';
-						echo '<div class="software-downloads rightcol">';
-							echo $meta['Downloads'];
-						echo '</div>';
-						echo '<div class="leftcol">Rating:</div>';
-						echo '<div class="software-rating rightcol" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">';
-							echo '<div class="rating-stars">';
-								echo '<div class="rating" style="width: ' . ( $meta['Rating'] / 5 ) * 100 . '%;">';
-									echo '<meta itemprop="ratingValue" content="' . $meta['Rating'] . '">';
-									echo '<meta itemprop="reviewCount" content="' . $meta['Votes'] . '">';
+					if( isset( $meta['Rating'] ) && isset( $meta['Votes'] ) ) {
+						echo '<div class="software-meta-table">';
+							echo '<div class="leftcol">Version:</div>';
+							echo '<div class="software-version rightcol">';
+								echo $meta['Version'];
+							echo '</div>';
+							echo '<div class="leftcol">Downloads:</div>';
+							echo '<div class="software-downloads rightcol">';
+								echo $meta['Downloads'];
+							echo '</div>';
+							echo '<div class="leftcol">Rating:</div>';
+							echo '<div class="software-rating rightcol" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">';
+								echo '<div class="rating-stars">';
+									echo '<div class="rating" style="width: ' . ( $meta['Rating'] / 5 ) * 100 . '%;">';
+										echo '<meta itemprop="ratingValue" content="' . $meta['Rating'] . '">';
+										echo '<meta itemprop="reviewCount" content="' . $meta['Votes'] . '">';
+									echo '</div>';
 								echo '</div>';
+								echo  '(' . $meta['Rating'] . '/5)';
 							echo '</div>';
-							echo  '(' . $meta['Rating'] . '/5)';
+							if ( strlen( $meta['Votes'] ) > 1 ) {
+								echo '<div class="leftcol"># of Ratings:</div>';
+								echo '<div class="software-votes rightcol">';
+									echo $meta['Votes'];
+								echo '</div>';
+							}
 						echo '</div>';
-						if ( strlen( $meta['Votes'] ) > 1 ) {
-							echo '<div class="leftcol"># of Ratings:</div>';
-							echo '<div class="software-votes rightcol">';
-								echo $meta['Votes'];
-							echo '</div>';
-						}
-					echo '</div>';
+					}
 					echo '<div class="software-links">';
 
 						echo '<a class="software-download btn" href="' . get_post_meta( $post->ID, '_bit51_download_url', true ) . '" title="Download ' . get_the_title() . '" target="_blank" >Download</a>';

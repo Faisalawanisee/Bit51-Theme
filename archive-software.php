@@ -44,15 +44,17 @@ function bit51_software_loop() {
  			
 			echo '<div class="software-short">';
 				echo '<h3 class="software-title"><a href="' . get_permalink( $post->ID ) . '">' . get_the_title() . '</a></h3>';
-				echo '<div class="software-rating" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating"><span class="rated">Rated:</span> ';
-					echo '<div class="rating-stars">';
-						echo '<div class="rating" style="width: ' . ( $meta['Rating'] / 5 ) * 100 . '%;">';
-							echo '<meta itemprop="ratingValue" content="' . $meta['Rating'] . '">';
-							echo '<meta itemprop="reviewCount" content="' . $meta['Votes'] . '">';
+				if( isset( $meta['Rating'] ) && isset( $meta['Votes'] ) ) {
+					echo '<div class="software-rating" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating"><span class="rated">Rated:</span> ';
+						echo '<div class="rating-stars">';
+							echo '<div class="rating" style="width: ' . ( $meta['Rating'] / 5 ) * 100 . '%;">';
+								echo '<meta itemprop="ratingValue" content="' . $meta['Rating'] . '">';
+								echo '<meta itemprop="reviewCount" content="' . $meta['Votes'] . '">';
+							echo '</div>';
 						echo '</div>';
+						echo  $meta['Rating'] . '/5 with ' . $meta['Votes'] . ' votes and ' . $meta['Downloads'] . ' downloads.';
 					echo '</div>';
-					echo  $meta['Rating'] . '/5 with ' . $meta['Votes'] . ' votes and ' . $meta['Downloads'] . ' downloads.';
-				echo '</div>';
+				}
 				echo '<div class="software-excerpt">' . get_the_excerpt() . "</div>";
 				echo '<div class="software-links">';
 					echo '<a class="software-info" href="' . get_permalink( $post->ID ) . '" title="' . get_the_title() . ' - More Information" ><i class="icon-info-sign"></i> More Info</a>';
