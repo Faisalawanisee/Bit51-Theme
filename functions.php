@@ -6,6 +6,9 @@ require_once( get_template_directory() . '/lib/init.php' );
 define( 'CHILD_THEME_NAME', 'Bit51 Theme' );
 define( 'CHILD_THEME_URL', 'http://bit51.com/' );
 
+//* Add HTML5 markup structure
+add_theme_support( 'html5' );
+
 // Don't load style.css for the user
 remove_action( 'genesis_meta', 'genesis_load_stylesheet' );
 
@@ -30,7 +33,7 @@ function bit51_scripts() {
 add_action( 'wp_enqueue_scripts', 'bit51_add_my_stylesheet' );
 function bit51_add_my_stylesheet() {
 
-	wp_register_style( 'bit51', get_stylesheet_directory_uri() . '/css/main.min.css' );
+	wp_register_style( 'bit51', get_stylesheet_directory_uri() . '/css/main.css' );
 	wp_enqueue_style( 'bit51' );
 	wp_register_style( 'gfonts', 'http://fonts.googleapis.com/css?family=Gudea:400,700|Arvo:700' );
 	wp_enqueue_style( 'gfonts' );
@@ -77,7 +80,7 @@ genesis_register_sidebar( array(
 ) );
 
 // Remove after post meta
-remove_action( 'genesis_after_post_content', 'genesis_post_meta' );
+remove_action( 'genesis_entry_footer', 'genesis_post_meta' );
 
 // Remove secondary sidebar
 unregister_sidebar( 'header-right' );
@@ -87,12 +90,19 @@ unregister_sidebar( 'sidebar-alt' );
 // Modify the Author Box
 add_filter( 'get_the_author_genesis_author_box_single', '__return_true' );
 add_filter( 'get_the_author_genesis_author_box_archive', '__return_true' );
-remove_action( 'genesis_after_post', 'genesis_do_author_box_single' );
-add_action( 'genesis_before_comments', 'bit51_author_box_single' );
+remove_action( 'genesis_after_entry', 'genesis_do_author_box_single' );
+remove_action( 'genesis_after_entry', 'genesis_do_author_box_single', 8 );
+remove_action( 'genesis_after_post', 'genesis_do_author_box_single', 8 );
+remove_action( 'genesis_after_post', 'genesis_do_author_box_single', 8 );
+add_action( 'genesis_after_post', 'bit51_author_box_single' );
+add_action( 'genesis_after_post', 'bit51_author_box_single', 8 );
+add_action( 'genesis_after_entry', 'bit51_author_box_single' );
+add_action( 'genesis_after_entry', 'bit51_author_box_single', 8 );
 remove_action( 'genesis_before_loop', 'genesis_do_author_box_archive' );
 add_action( 'genesis_before_loop', 'bit51_author_box_archive' );
 
 function bit51_author_box_single() {
+
 	if ( is_single() ) {
 		
 		bit51_author_box();
@@ -135,7 +145,7 @@ function bit51_author_box() {
 	@ini_set( 'auto_detect_line_endings', true );
 
 	$authinfo =  '<div class="author-box">' . PHP_EOL;
-	$authinfo .= get_avatar( get_the_author_id() , 80 );
+	$authinfo .= get_avatar( get_the_author_meta( 'ID' ) , 80 );
 
 	if ( strlen( get_the_author_meta( 'url' ) ) > 1 ) {
 		$authinfo .= '<strong>About <a href="' . get_the_author_meta( 'url' ) . '" target="_blank" title="' . get_the_author_meta( 'website_title' ) . '">' . get_the_author_meta( 'display_name' ) . '</a></strong>' . PHP_EOL;
@@ -198,20 +208,10 @@ add_filter( 'genesis_footer_creds_text', 'custom_footer_creds_text' );
 
 function custom_footer_creds_text( $creds ) {
 	
-	$creds = '&copy; 2011-' . date( 'Y', time() ) . ' Bit51 - <a href="http://creativecommons.org/licenses/by-nc/3.0/deed.en_US" target="_blank">Creative Commons Licensed</a>. Built on <a href="http://b51.co/SPGenesis" target="_blank">Genesis</a>.';
+	$creds = '&copy; 2011 - ' . date( 'Y', time() ) . ' Bit51 - <a href="http://creativecommons.org/licenses/by-nc/3.0/deed.en_US" target="_blank">Creative Commons Licensed</a>. Built on <a href="http://b51.co/SPGenesis" target="_blank">Genesis</a>.';
 	
 	return $creds;
 	
-}
-
-//Customize return to top of page text
-add_filter( 'genesis_footer_backtotop_text', 'bit51_footer_backtotop_text' );
-function bit51_footer_backtotop_text( $backtotop ) {
-
-	$backtotop = '[footer_backtotop text="Go To Top"]';
-
-	return $backtotop;
-
 }
 
 //Customize search text
@@ -271,34 +271,56 @@ add_action( 'genesis_after_header', 'bit51_do_nav' );
 
 function bit51_do_nav() {
 
-	/** Do nothing if menu not supported */
+	//* Do nothing if menu not supported
 	if ( ! genesis_nav_menu_supported( 'primary' ) )
 		return;
 
-	/** If menu is assigned to theme location, output */
+	//* If menu is assigned to theme location, output
 	if ( has_nav_menu( 'primary' ) ) {
+
+		$class = 'menu genesis-nav-menu menu-primary';
+		if ( genesis_superfish_enabled() )
+			$class .= ' js-superfish';
 
 		$args = array(
 			'theme_location' => 'primary',
 			'container'      => '',
-			'menu_class'     => genesis_get_option( 'nav_superfish' ) ? 'menu genesis-nav-menu menu-primary superfish' : 'menu genesis-nav-menu menu-primary',
+			'menu_class'     => $class,
 			'echo'           => 0,
 		);
 
 		$nav = wp_nav_menu( $args );
 
-		$pattern = genesis_markup( '<nav class="primary">%2$s%1$s%3$s</nav>', '<div id="nav">%2$s<div id="logo"><a href="http://bit51.com" title="Bit51"><img src="' . get_stylesheet_directory_uri() . '/images/logo.png" alt="Bit51" width="71" height="30"></a></div>%1$s%3$s</div>', 0 );
+		//* Do nothing if there is nothing to show
+		if ( ! $nav )
+			return;
 
-		$nav_output = sprintf( $pattern, $nav, genesis_structural_wrap( 'nav', 'open', 0 ), genesis_structural_wrap( 'nav', 'close', 0 ) );
+		$nav_markup_open = genesis_markup( array(
+			'html5'   => '<nav %s>',
+			'xhtml'   => '<div id="nav">',
+			'context' => 'nav-primary',
+			'echo'    => false,
+		) );
+
+		$nav_markup_open .= genesis_structural_wrap( 'menu-primary', 'open', 0 );
+
+		$pattern = '<div class="site-logo"><a href="http://bit51.com" title="Bit51"><img src="' . get_stylesheet_directory_uri() . '/images/logo.png" alt="Bit51" width="71" height="30"></a></div>';
+
+		$nav_markup_close  = genesis_structural_wrap( 'menu-primary', 'close', 0 );
+		$nav_markup_close .= genesis_html5() ? '</nav>' : '</div>';
+
+		$nav_output = $nav_markup_open . $pattern . $nav . $nav_markup_close;
 
 		echo apply_filters( 'genesis_do_nav', $nav_output, $nav, $args );
+
+
 
 	}
 
 }
 
 //clear the posts
-add_action( 'genesis_after_post_content', 'bit51_after_post_content' );
+add_action( 'genesis_entry_footer', 'bit51_after_post_content' );
 
 function bit51_after_post_content() {
 	echo '<div class="clear"></div>';

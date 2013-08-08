@@ -1,12 +1,12 @@
 jQuery( document ).ready( function() {
 
 	//prepend menu icon
-	jQuery( '#logo' ).after(
-		'<div id="menu-icon">Menu</div>'
+	jQuery( '.site-logo' ).after(
+		'<div class="menu-icon">Menu</div>'
 	);
 
 	//toggle nav
-	jQuery( '#menu-icon' ).on( 'click', function() {
+	jQuery( '.menu-icon' ).on( 'click', function() {
 
 		jQuery( "#menu-main-menu" ).slideToggle( 'slow' );
 		jQuery( this ).toggleClass( 'active' );
