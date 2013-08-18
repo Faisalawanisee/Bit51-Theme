@@ -45,7 +45,7 @@ function bit51_software_loop() {
 			echo '<div class="software-short">';
 				echo '<h3 class="software-title"><a href="' . get_permalink( $post->ID ) . '">' . get_the_title() . '</a></h3>';
 
-				if( $meta !== false ) {
+				if( $meta != false ) {
 					echo '<div class="software-rating" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating"><span class="rated">Rated:</span> ';
 						echo '<div class="rating-stars">';
 							echo '<div class="rating" style="width: ' . ( $meta['Rating'] / 5 ) * 100 . '%;">';

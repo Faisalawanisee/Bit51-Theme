@@ -7,7 +7,8 @@ if ( ! class_exists( 'bit51_software_page' ) ) {
 
 	class bit51_software_page {
 
-		private $spage, 
+		private
+			$spage,
 			$spages,
 			$sfaq;
 
@@ -77,34 +78,34 @@ if ( ! class_exists( 'bit51_software_page' ) ) {
 				}
 
 				//Include Advanced Custom Fields Repeater
-				add_action( 'acf/register_fields', array( &$this, 'bit51_register_fields' ) );
+				add_action( 'acf/register_fields', array( $this, 'bit51_register_fields' ) );
 
 
 				/** Customize the post title **/
 				remove_action( 'genesis_post_title', 'genesis_do_post_title' );
-				add_action( 'genesis_post_title', array( &$this, 'bit51_do_post_title' ) );
+				add_action( 'genesis_post_title', array( $this, 'bit51_do_post_title' ) );
 
 				/** Customize the breadcrumb **/
-				add_filter( 'genesis_single_crumb', array( &$this, 'bit51_add_blog_crumb' ), 10, 2 );
-				add_filter( 'genesis_archive_crumb', array( &$this, 'bit51_add_blog_crumb' ), 10, 2 );
+				add_filter( 'genesis_single_crumb', array( $this, 'bit51_add_blog_crumb' ), 10, 2 );
+				add_filter( 'genesis_archive_crumb', array( $this, 'bit51_add_blog_crumb' ), 10, 2 );
 
 			}
 
 			/** Remove the post info function */
-			remove_action( 'genesis_before_post_content', 'genesis_post_info' );
+			remove_action( 'genesis_entry_header', 'genesis_post_info' );
 
 			/** Remove the author box on single posts */
-			remove_action( 'genesis_after_post', 'genesis_do_author_box_single' );
+			remove_action( 'genesis_after_entry', 'genesis_do_author_box_single' );
 
 			/** Remove the post meta function */
-			remove_action( 'genesis_after_post_content', 'genesis_post_meta' );
+			remove_action( 'genesis_entry_footer', 'genesis_post_meta' );
 
 			/** Remove the comments template */
-			remove_action( 'genesis_after_post', 'genesis_get_comments_template' );
+			remove_action( 'genesis_after_entry', 'genesis_get_comments_template' );
 
 			/** Customize the content */
-			remove_action( 'genesis_post_content', 'genesis_do_post_content' );
-			add_action( 'genesis_post_content', array( &$this, 'bit51_content' ) );
+			remove_action( 'genesis_entry_content', 'genesis_do_post_content' );
+			add_action( 'genesis_entry_content', array( $this, 'bit51_content' ) );
 
 			/** Execute Genesis **/
 			genesis();
@@ -238,7 +239,7 @@ if ( ! class_exists( 'bit51_software_page' ) ) {
 				
 				// display plugin meta information
 				echo '<div id="software-meta">';
-					if( isset( $meta['Rating'] ) && isset( $meta['Votes'] ) ) {
+					if( $meta != false ) {
 						echo '<div class="software-meta-table">';
 							echo '<div class="leftcol">Version:</div>';
 							echo '<div class="software-version rightcol">';
@@ -246,7 +247,7 @@ if ( ! class_exists( 'bit51_software_page' ) ) {
 							echo '</div>';
 							echo '<div class="leftcol">Downloads:</div>';
 							echo '<div class="software-downloads rightcol">';
-								echo $meta['Downloads'];
+								echo number_format( substr( $meta['Downloads'], 14 ) );
 							echo '</div>';
 							echo '<div class="leftcol">Rating:</div>';
 							echo '<div class="software-rating rightcol" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">';
