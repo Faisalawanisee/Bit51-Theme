@@ -89,21 +89,19 @@ unregister_sidebar( 'sidebar-alt' );
 
 // Modify the Author Box
 add_filter( 'get_the_author_genesis_author_box_single', '__return_true' );
-add_filter( 'get_the_author_genesis_author_box_archive', '__return_true' );
+add_filter( 'get_the_author_genesis_author_box_archive', '__return_false' );
 remove_action( 'genesis_after_entry', 'genesis_do_author_box_single' );
 remove_action( 'genesis_after_entry', 'genesis_do_author_box_single', 8 );
 remove_action( 'genesis_after_post', 'genesis_do_author_box_single', 8 );
 remove_action( 'genesis_after_post', 'genesis_do_author_box_single', 8 );
-add_action( 'genesis_after_post', 'bit51_author_box_single' );
 add_action( 'genesis_after_post', 'bit51_author_box_single', 8 );
-add_action( 'genesis_after_entry', 'bit51_author_box_single' );
 add_action( 'genesis_after_entry', 'bit51_author_box_single', 8 );
 remove_action( 'genesis_before_loop', 'genesis_do_author_box_archive' );
 add_action( 'genesis_before_loop', 'bit51_author_box_archive' );
 
 function bit51_author_box_single() {
 
-	if ( is_single() ) {
+	if ( is_single() && get_post_type() == 'post') {
 		
 		bit51_author_box();
 
