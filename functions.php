@@ -54,7 +54,7 @@ function bit51_post_info_filter( $post_info ) {
 
 	if ( is_home() || ! is_page() || ! is_single() ) {
 	
-		$post_info = '[post_date format="F jS, Y"] [post_edit] [post_comments zero="Leave a Comment" one="1 Comment" more="% Comments" hide_if_off="false"]';
+		$post_info = '[post_date format="F jS, Y"] by [post_author_posts_link] [post_edit] <span class="alignright">[post_comments zero="Leave a Comment" one="1 Comment" more="% Comments" hide_if_off="false"]</span>';
 		
 	}
 	
