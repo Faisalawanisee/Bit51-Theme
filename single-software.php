@@ -92,7 +92,7 @@ if ( ! class_exists( 'bit51_software_page' ) ) {
 			}
 
 			/** Remove the post info function */
-			remove_action( 'genesis_entry_header', 'genesis_post_info' );
+			remove_action( 'genesis_entry_header', 'genesis_post_info', 12 );
 
 			/** Remove the author box on single posts */
 			remove_action( 'genesis_after_entry', 'genesis_do_author_box_single' );
@@ -132,8 +132,8 @@ if ( ! class_exists( 'bit51_software_page' ) ) {
 				return;
 
 			$title = sprintf( '<h1 class="entry-title">%s - %s</h1>', $title, $this->spages[$this->spage] );
-			
-			echo apply_filters( 'genesis_post_title_output', "$title \n" );
+
+			echo apply_filters( 'genesis_post_title_output', $title . "\n" );
 
 		}
 
