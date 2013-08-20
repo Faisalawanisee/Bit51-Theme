@@ -145,6 +145,8 @@ if ( ! class_exists( 'bit51_software_page' ) ) {
 		 */
 		function bit51_add_blog_crumb( $crumb, $args ) {
 
+			global $post;
+
 			return '<a href="' . get_bloginfo( 'url' ) . '/software/" title="View all Software">Software</a> / <a href="' . get_permalink( $post->ID ) . '" title="">' . get_the_title( $post->ID ) . '</a> / ' . $this->spages[$this->spage];
 
 		}
